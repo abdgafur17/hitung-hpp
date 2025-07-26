@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator HPP UMKM</title>
+    <title>Kalkulator HPP UMKM - Perhitungan Akurat</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -382,6 +382,33 @@
             border-top: 2px solid var(--accent);
         }
         
+        .cost-details {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 3px;
+            background: #f0f4ff;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        
+        .calculation-steps {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .step {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .step-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
         footer {
             text-align: center;
             margin-top: 20px;
@@ -389,12 +416,6 @@
             border-top: 1px solid var(--accent);
             color: var(--primary);
             font-size: 0.85rem;
-        }
-        
-        .cost-details {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 3px;
         }
         
         /* Responsive design for mobile */
@@ -514,7 +535,7 @@
                     </div>
                     <div class="form-group">
                         <label>Total Isi</label>
-                        <input type="number" class="material-total" min="0" value="5000" placeholder="ml, gram, dll">
+                        <input type="number" class="material-total" min="0.0001" step="0.0001" value="5000" placeholder="ml, gram, dll">
                     </div>
                     <div class="form-group">
                         <label>Jumlah Terpakai</label>
@@ -537,7 +558,7 @@
                     </div>
                     <div class="form-group">
                         <label>Total Isi</label>
-                        <input type="number" class="material-total" min="0" value="15000" placeholder="ml, gram, dll">
+                        <input type="number" class="material-total" min="0.0001" step="0.0001" value="15000" placeholder="ml, gram, dll">
                     </div>
                     <div class="form-group">
                         <label>Jumlah Terpakai</label>
@@ -567,7 +588,7 @@
                     </div>
                     <div class="form-group">
                         <label>Total Isi</label>
-                        <input type="number" class="topping-total" min="0" value="1000" placeholder="ml, gram, dll">
+                        <input type="number" class="topping-total" min="0.0001" step="0.0001" value="1000" placeholder="ml, gram, dll">
                     </div>
                     <div class="form-group">
                         <label>Jumlah Terpakai</label>
@@ -590,7 +611,7 @@
                     </div>
                     <div class="form-group">
                         <label>Total Isi</label>
-                        <input type="number" class="topping-total" min="0" value="118" placeholder="ml, gram, dll">
+                        <input type="number" class="topping-total" min="0.0001" step="0.0001" value="118" placeholder="ml, gram, dll">
                     </div>
                     <div class="form-group">
                         <label>Jumlah Terpakai</label>
@@ -720,6 +741,10 @@
                 </div>
             </div>
             
+            <div id="calculationDetails">
+                <!-- Calculation details will be inserted here -->
+            </div>
+            
             <div id="analysisResult">
                 <!-- Analysis will be inserted here -->
             </div>
@@ -842,7 +867,7 @@
                 </div>
                 <div class="form-group">
                     <label>Total Isi</label>
-                    <input type="number" class="${containerId === 'rawMaterials' ? 'material' : 'topping'}-total" min="0" placeholder="ml, gram, dll">
+                    <input type="number" class="${containerId === 'rawMaterials' ? 'material' : 'topping'}-total" min="0.0001" step="0.0001" placeholder="ml, gram, dll">
                 </div>
                 <div class="form-group">
                     <label>Jumlah Terpakai</label>
@@ -919,6 +944,7 @@
                 if (price > 0 && total > 0 && used > 0) {
                     const pricePerUnit = price / total;
                     const totalCost = used * pricePerUnit;
+                    const costPerPcs = totalCost / (productQty || 1);
                     totalRawMaterials += totalCost;
                     
                     materialDetails.push({
@@ -928,7 +954,8 @@
                         used,
                         unit,
                         pricePerUnit,
-                        totalCost
+                        totalCost,
+                        costPerPcs
                     });
                 }
             });
@@ -947,6 +974,7 @@
                 if (price > 0 && total > 0 && used > 0) {
                     const pricePerUnit = price / total;
                     const totalCost = used * pricePerUnit;
+                    const costPerPcs = totalCost / (productQty || 1);
                     totalToppings += totalCost;
                     
                     toppingDetails.push({
@@ -956,7 +984,8 @@
                         used,
                         unit,
                         pricePerUnit,
-                        totalCost
+                        totalCost,
+                        costPerPcs
                     });
                 }
             });
@@ -1009,6 +1038,9 @@
             ];
             costChart.update();
             
+            // Show calculation details
+            showCalculationDetails(materialDetails, toppingDetails, productQty);
+            
             // Perform analysis
             performAnalysis(hppPerPiece, sellingPrice, soldQty, productQty, grossProfit);
             
@@ -1018,6 +1050,41 @@
         // Function to format currency
         function formatCurrency(amount) {
             return 'Rp ' + amount.toLocaleString('id-ID');
+        }
+        
+        // Function to show calculation details
+        function showCalculationDetails(materials, toppings, productQty) {
+            let detailsHTML = '<div class="calculation-steps">';
+            detailsHTML += '<h3><i class="fas fa-calculator"></i> Detail Perhitungan Bahan</h3>';
+            
+            // Material details
+            detailsHTML += '<h4>Bahan Baku Utama:</h4>';
+            materials.forEach(material => {
+                detailsHTML += `
+                    <div class="step">
+                        <strong>${material.name}:</strong>
+                        <div class="step">1. Harga per ${material.unit}: <span class="step-value">${formatCurrency(material.pricePerUnit)}</span> (${formatCurrency(material.price)} ÷ ${material.total.toLocaleString()} ${material.unit})</div>
+                        <div class="step">2. Total biaya: <span class="step-value">${formatCurrency(material.totalCost)}</span> (${material.used.toLocaleString()} ${material.unit} × ${formatCurrency(material.pricePerUnit)})</div>
+                        <div class="step">3. Biaya per pcs: <span class="step-value">${formatCurrency(material.costPerPcs)}</span> (${formatCurrency(material.totalCost)} ÷ ${productQty} pcs)</div>
+                    </div>
+                `;
+            });
+            
+            // Topping details
+            detailsHTML += '<h4>Topping / Glaze:</h4>';
+            toppings.forEach(topping => {
+                detailsHTML += `
+                    <div class="step">
+                        <strong>${topping.name}:</strong>
+                        <div class="step">1. Harga per ${topping.unit}: <span class="step-value">${formatCurrency(topping.pricePerUnit)}</span> (${formatCurrency(topping.price)} ÷ ${topping.total.toLocaleString()} ${topping.unit})</div>
+                        <div class="step">2. Total biaya: <span class="step-value">${formatCurrency(topping.totalCost)}</span> (${topping.used.toLocaleString()} ${topping.unit} × ${formatCurrency(topping.pricePerUnit)})</div>
+                        <div class="step">3. Biaya per pcs: <span class="step-value">${formatCurrency(topping.costPerPcs)}</span> (${formatCurrency(topping.totalCost)} ÷ ${productQty} pcs)</div>
+                    </div>
+                `;
+            });
+            
+            detailsHTML += '</div>';
+            document.getElementById('calculationDetails').innerHTML = detailsHTML;
         }
         
         // Function to perform analysis
@@ -1083,7 +1150,7 @@
                     </div>
                     <div class="form-group">
                         <label>Total Isi</label>
-                        <input type="number" class="material-total" min="0" value="5000" placeholder="ml, gram, dll">
+                        <input type="number" class="material-total" min="0.0001" step="0.0001" value="5000" placeholder="ml, gram, dll">
                     </div>
                     <div class="form-group">
                         <label>Jumlah Terpakai</label>
@@ -1106,7 +1173,7 @@
                     </div>
                     <div class="form-group">
                         <label>Total Isi</label>
-                        <input type="number" class="material-total" min="0" value="15000" placeholder="ml, gram, dll">
+                        <input type="number" class="material-total" min="0.0001" step="0.0001" value="15000" placeholder="ml, gram, dll">
                     </div>
                     <div class="form-group">
                         <label>Jumlah Terpakai</label>
@@ -1133,7 +1200,7 @@
                     </div>
                     <div class="form-group">
                         <label>Total Isi</label>
-                        <input type="number" class="topping-total" min="0" value="1000" placeholder="ml, gram, dll">
+                        <input type="number" class="topping-total" min="0.0001" step="0.0001" value="1000" placeholder="ml, gram, dll">
                     </div>
                     <div class="form-group">
                         <label>Jumlah Terpakai</label>
@@ -1156,7 +1223,7 @@
                     </div>
                     <div class="form-group">
                         <label>Total Isi</label>
-                        <input type="number" class="topping-total" min="0" value="118" placeholder="ml, gram, dll">
+                        <input type="number" class="topping-total" min="0.0001" step="0.0001" value="118" placeholder="ml, gram, dll">
                     </div>
                     <div class="form-group">
                         <label>Jumlah Terpakai</label>
@@ -1211,6 +1278,7 @@
             document.getElementById('totalOtherCosts').textContent = '0';
             document.getElementById('totalProductionCost').textContent = '0';
             document.getElementById('grossProfit').textContent = 'Rp 0';
+            document.getElementById('calculationDetails').innerHTML = '';
             document.getElementById('analysisResult').innerHTML = '';
             
             // Reset chart
@@ -1319,7 +1387,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Total Isi</label>
-                                    <input type="number" class="material-total" min="0" value="${material.total || 0}">
+                                    <input type="number" class="material-total" min="0.0001" step="0.0001" value="${material.total || 0}">
                                 </div>
                                 <div class="form-group">
                                     <label>Jumlah Terpakai</label>
@@ -1350,7 +1418,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Total Isi</label>
-                                    <input type="number" class="topping-total" min="0" value="${topping.total || 0}">
+                                    <input type="number" class="topping-total" min="0.0001" step="0.0001" value="${topping.total || 0}">
                                 </div>
                                 <div class="form-group">
                                     <label>Jumlah Terpakai</label>
