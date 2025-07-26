@@ -1348,27 +1348,28 @@
                 
                 // Data untuk sheet utama
                 const mainData = [
-                    ['Kalkulator HPP UMKM', ''],
-                    ['Tanggal', new Date().toLocaleDateString('id-ID')],
-                    ['Nama Produk', productName],
-                    ['Jumlah Produksi', productQty],
-                    ['Harga Jual per Pcs', sellingPrice ? `Rp ${parseFloat(sellingPrice).toLocaleString('id-ID')}` : '-'],
-                    ['HPP per Pcs', hppPerPcs],
-                    ['Total Biaya Produksi', totalProductionCost],
-                    ['', ''],
-                    ['Rincian Biaya', ''],
-                    ['Bahan Baku Utama', document.getElementById('totalMaterialCost').textContent],
-                    ['Topping/Glaze', document.getElementById('totalToppingCost').textContent],
-                    ['Biaya Energi', document.getElementById('totalEnergyCost').textContent],
-                    ['Biaya Lainnya', document.getElementById('totalOtherCost').textContent],
-                    ['Total Biaya Produksi', totalProductionCost]
+                    ["KALKULATOR HPP UMKM", "", "", "", "", ""],
+                    ["Tanggal", new Date().toLocaleDateString('id-ID'), "", "", "", ""],
+                    ["Nama Produk", productName, "", "", "", ""],
+                    ["Jumlah Produksi", productQty, "", "", "", ""],
+                    ["Harga Jual per Pcs", sellingPrice ? `Rp ${parseFloat(sellingPrice).toLocaleString('id-ID')}` : '-', "", "", "", ""],
+                    ["HPP per Pcs", hppPerPcs, "", "", "", ""],
+                    ["Total Biaya Produksi", totalProductionCost, "", "", "", ""],
+                    ["", "", "", "", "", ""],
+                    ["RINCIAN BIAYA", "", "", "", "", ""],
+                    ["", "", "", "", "", ""],
+                    ["Kategori Biaya", "Total", "", "", "", ""],
+                    ["Bahan Baku Utama", document.getElementById('totalMaterialCost').textContent],
+                    ["Topping/Glaze", document.getElementById('totalToppingCost').textContent],
+                    ["Biaya Energi", document.getElementById('totalEnergyCost').textContent],
+                    ["Biaya Lainnya", document.getElementById('totalOtherCost').textContent],
+                    ["Total Biaya Produksi", totalProductionCost],
+                    ["", "", "", "", "", ""],
+                    ["BAHAN BAKU UTAMA", "", "", "", "", ""],
+                    ["Nama Bahan", "Harga Satuan", "Isi Satuan", "Jml Terpakai", "Harga/Unit", "Total Biaya"]
                 ];
                 
                 // Tambahkan bahan baku
-                mainData.push(['', '']);
-                mainData.push(['Bahan Baku Utama', '']);
-                mainData.push(['Nama Bahan', 'Harga Satuan', 'Isi Satuan', 'Jml Terpakai', 'Harga/Unit', 'Total Biaya']);
-                
                 document.querySelectorAll('#rawMaterials .input-row').forEach(row => {
                     const name = row.querySelector('.material-name').value || '';
                     const price = row.querySelector('.material-price').value || '0';
@@ -1388,9 +1389,9 @@
                 });
                 
                 // Tambahkan topping
-                mainData.push(['', '']);
-                mainData.push(['Topping/Glaze', '']);
-                mainData.push(['Nama Topping', 'Harga Satuan', 'Isi Satuan', 'Jml Terpakai', 'Harga/Unit', 'Total Biaya']);
+                mainData.push(["", "", "", "", "", ""]);
+                mainData.push(["TOPPING/GLAZE", "", "", "", "", ""]);
+                mainData.push(["Nama Topping", "Harga Satuan", "Isi Satuan", "Jml Terpakai", "Harga/Unit", "Total Biaya"]);
                 
                 document.querySelectorAll('#toppings .input-row').forEach(row => {
                     const name = row.querySelector('.topping-name').value || '';
@@ -1411,9 +1412,9 @@
                 });
                 
                 // Tambahkan biaya lainnya
-                mainData.push(['', '']);
-                mainData.push(['Biaya Lainnya', '']);
-                mainData.push(['Deskripsi', 'Biaya']);
+                mainData.push(["", "", "", "", "", ""]);
+                mainData.push(["BIAYA LAINNYA", "", "", "", "", ""]);
+                mainData.push(["Deskripsi", "Biaya", "", "", "", ""]);
                 
                 document.querySelectorAll('#otherCosts .input-row').forEach(row => {
                     const name = row.querySelector('.other-name').value || '';
@@ -1431,6 +1432,17 @@
                 // Tambahkan worksheet ke workbook
                 XLSX.utils.book_append_sheet(wb, ws, "Perhitungan HPP");
                 
+                // Format kolom
+                const wscols = [
+                    {wch: 30}, // Lebar kolom nama
+                    {wch: 20},
+                    {wch: 15},
+                    {wch: 15},
+                    {wch: 15},
+                    {wch: 20}
+                ];
+                ws['!cols'] = wscols;
+                
                 // Simpan file Excel
                 XLSX.writeFile(wb, `perhitungan_hpp_${productName.replace(/\s+/g, '_')}.xlsx`);
                 
@@ -1440,30 +1452,112 @@
             }
         }
         
-        // Fungsi untuk save PDF
+        // Fungsi untuk save PDF dengan tampilan sederhana
         function savePDF() {
             try {
-                // Gunakan html2canvas untuk membuat gambar dari konten
-                html2canvas(document.querySelector('.container')).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
-                    const pdf = new jspdf.jsPDF({
-                        orientation: 'portrait',
-                        unit: 'mm',
-                        format: 'a4'
-                    });
-                    
-                    const imgWidth = 210; // Lebar A4 dalam mm
-                    const imgHeight = canvas.height * imgWidth / canvas.width;
-                    
-                    // Tambahkan gambar ke PDF
-                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-                    
-                    // Simpan PDF
-                    const productName = document.getElementById('productName').value || 'produk_umkm';
-                    pdf.save(`perhitungan_hpp_${productName.replace(/\s+/g, '_')}.pdf`);
-                    
-                    showNotification('Data berhasil disimpan sebagai PDF!', true);
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
                 });
+                
+                const productName = document.getElementById('productName').value || 'Produk UMKM';
+                const productQty = document.getElementById('productQty').value || '0';
+                const sellingPrice = document.getElementById('sellingPrice').value || '0';
+                const hppPerPcs = document.querySelector('.hpp-value').textContent;
+                const totalProductionCost = document.getElementById('totalProductionCost').textContent;
+                
+                // Judul
+                pdf.setFontSize(20);
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Laporan Perhitungan HPP", 105, 20, null, null, 'center');
+                
+                // Informasi dasar
+                pdf.setFontSize(12);
+                pdf.setFont("helvetica", "normal");
+                pdf.text(`Nama Produk: ${productName}`, 20, 30);
+                pdf.text(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 20, 35);
+                pdf.text(`Jumlah Produksi: ${productQty} pcs`, 20, 40);
+                pdf.text(`Harga Jual per Pcs: ${sellingPrice ? 'Rp ' + parseFloat(sellingPrice).toLocaleString('id-ID') : '-'}`, 20, 45);
+                pdf.text(`HPP per Pcs: ${hppPerPcs}`, 20, 50);
+                pdf.text(`Total Biaya Produksi: ${totalProductionCost}`, 20, 55);
+                
+                // Garis pemisah
+                pdf.line(20, 60, 190, 60);
+                
+                // Rincian biaya
+                pdf.setFontSize(14);
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Rincian Biaya Produksi", 105, 70, null, null, 'center');
+                
+                pdf.setFontSize(12);
+                pdf.setFont("helvetica", "normal");
+                let yPos = 80;
+                
+                // Bahan baku
+                pdf.text("Bahan Baku Utama:", 20, yPos);
+                yPos += 5;
+                document.querySelectorAll('#rawMaterials .input-row').forEach(row => {
+                    const name = row.querySelector('.material-name').value || '-';
+                    const total = row.querySelector('.material-total').value || 'Rp 0';
+                    pdf.text(`- ${name}: ${total}`, 25, yPos);
+                    yPos += 5;
+                });
+                
+                // Topping
+                yPos += 2;
+                pdf.text("Topping/Glaze:", 20, yPos);
+                yPos += 5;
+                document.querySelectorAll('#toppings .input-row').forEach(row => {
+                    const name = row.querySelector('.topping-name').value || '-';
+                    const total = row.querySelector('.topping-total').value || 'Rp 0';
+                    pdf.text(`- ${name}: ${total}`, 25, yPos);
+                    yPos += 5;
+                });
+                
+                // Biaya energi
+                yPos += 2;
+                pdf.text("Biaya Energi:", 20, yPos);
+                yPos += 5;
+                pdf.text(`- Listrik: Rp ${parseFloat(document.getElementById('electricityCost').value || '0').toLocaleString('id-ID')}`, 25, yPos);
+                yPos += 5;
+                pdf.text(`- Gas: Rp ${parseFloat(document.getElementById('gasCost').value || '0').toLocaleString('id-ID')}`, 25, yPos);
+                yPos += 5;
+                pdf.text(`- Sewa Tempat: Rp ${parseFloat(document.getElementById('rentCost').value || '0').toLocaleString('id-ID')}`, 25, yPos);
+                
+                // Biaya lainnya
+                yPos += 2;
+                pdf.text("Biaya Lainnya:", 20, yPos);
+                yPos += 5;
+                document.querySelectorAll('#otherCosts .input-row').forEach(row => {
+                    const name = row.querySelector('.other-name').value || '-';
+                    const price = row.querySelector('.other-price').value || '0';
+                    pdf.text(`- ${name}: Rp ${parseFloat(price).toLocaleString('id-ID')}`, 25, yPos);
+                    yPos += 5;
+                });
+                
+                // Garis pemisah
+                yPos += 5;
+                pdf.line(20, yPos, 190, yPos);
+                yPos += 10;
+                
+                // Analisis
+                pdf.setFontSize(14);
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Analisis Profitabilitas", 105, yPos, null, null, 'center');
+                yPos += 10;
+                
+                pdf.setFontSize(12);
+                pdf.setFont("helvetica", "normal");
+                pdf.text(`Status: ${document.getElementById('profitStatus').textContent}`, 20, yPos);
+                yPos += 7;
+                pdf.text(`Analisis: ${document.getElementById('analysisText').textContent}`, 20, yPos);
+                
+                // Simpan PDF
+                pdf.save(`perhitungan_hpp_${productName.replace(/\s+/g, '_')}.pdf`);
+                
+                showNotification('Data berhasil disimpan sebagai PDF!', true);
             } catch (error) {
                 showNotification('Gagal menyimpan PDF: ' + error.message, false);
             }
