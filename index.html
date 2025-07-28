@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator HPP & Laba Produksi</title>
+    <title>Kalkulator HPP & Analisis Penjualan</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -17,103 +17,98 @@
             background: linear-gradient(135deg, #e0f7fa, #f5f5f5);
             color: #333;
             line-height: 1.6;
-            padding: 20px;
+            padding: 15px;
             min-height: 100vh;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 100%;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-        
-        @media (max-width: 900px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
         }
         
         header {
-            grid-column: 1 / -1;
             text-align: center;
-            padding: 25px 0;
-            background: rgba(255, 255, 255, 0.85);
+            padding: 20px 0;
+            background: rgba(255, 255, 255, 0.92);
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 15px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
         }
         
         h1 {
             color: #00796b;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
         
         .subtitle {
             color: #00897b;
-            font-size: 1.1rem;
-            max-width: 700px;
-            margin: 0 auto;
+            font-size: 0.95rem;
+            padding: 0 15px;
         }
         
         .card {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+            margin-bottom: 15px;
         }
         
         .card-title {
             color: #00796b;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
             border-bottom: 2px solid #80cbc4;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 1.2rem;
         }
         
         .card-title i {
             background: #e0f2f1;
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.1rem;
         }
         
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 15px;
         }
         
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: #00897b;
             font-weight: 500;
+            font-size: 0.95rem;
         }
         
-        input, select, button {
+        input, select, button, textarea {
             width: 100%;
-            padding: 12px 15px;
+            padding: 12px;
             border: 1px solid #b2dfdb;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 0.95rem;
             transition: all 0.3s;
         }
         
         input:focus, select:focus {
             outline: none;
             border-color: #00796b;
-            box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.2);
+            box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.15);
         }
         
         button {
@@ -123,24 +118,30 @@
             cursor: pointer;
             font-weight: 600;
             letter-spacing: 0.5px;
-            margin-top: 10px;
+            margin-top: 8px;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         button:hover {
             background: #00695c;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
         }
         
         .button-group {
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 15px;
         }
         
         .button-group button {
             flex: 1;
+            padding: 10px;
+            font-size: 0.9rem;
         }
         
         .btn-export {
@@ -169,16 +170,17 @@
         
         .results {
             background: #e8f5e9;
-            padding: 20px;
+            padding: 18px;
             border-radius: 10px;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         
         .result-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px dashed #a5d6a7;
+            font-size: 0.95rem;
         }
         
         .result-item:last-child {
@@ -197,43 +199,45 @@
             margin-top: 15px;
             text-align: center;
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #2e7d32;
         }
         
         .log-container {
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
-            padding-right: 10px;
+            padding-right: 8px;
         }
         
         .log-entry {
             background: #f1f8e9;
-            padding: 15px;
+            padding: 14px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             border-left: 4px solid #00796b;
+            font-size: 0.9rem;
         }
         
         .log-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: #00796b;
+            font-size: 1rem;
         }
         
         .log-content {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            font-size: 0.9rem;
+            gap: 8px;
+            font-size: 0.85rem;
         }
         
         .log-item {
             display: flex;
             justify-content: space-between;
-            padding: 5px 0;
+            padding: 4px 0;
         }
         
         .log-item .label {
@@ -248,7 +252,7 @@
         .empty-log {
             text-align: center;
             color: #78909c;
-            padding: 30px;
+            padding: 20px;
             font-style: italic;
         }
         
@@ -258,34 +262,114 @@
         
         .info-text {
             background: #e3f2fd;
-            padding: 15px;
+            padding: 14px;
             border-radius: 8px;
             margin-top: 15px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #1565c0;
         }
         
         .info-text ul {
-            padding-left: 20px;
-            margin-top: 10px;
+            padding-left: 18px;
+            margin-top: 8px;
         }
         
         .info-text li {
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
         
         footer {
-            grid-column: 1 / -1;
             text-align: center;
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 20px;
+            padding: 15px;
             color: #546e7a;
+            font-size: 0.85rem;
+        }
+        
+        /* Material Table */
+        .material-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
             font-size: 0.9rem;
+        }
+        
+        .material-table th {
+            background-color: #00897b;
+            color: white;
+            text-align: left;
+            padding: 10px;
+        }
+        
+        .material-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .material-table tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+        
+        .material-table tr:hover {
+            background-color: #e0f2f1;
+        }
+        
+        /* Sales Analysis */
+        .analysis-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .analysis-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .analysis-title {
+            font-weight: 600;
+            color: #00796b;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        
+        .analysis-value {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #e91e63;
+        }
+        
+        /* Mobile specific styles */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 750px;
+                margin: 0 auto;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .analysis-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
         }
         
         /* Scrollbar styling */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         
         ::-webkit-scrollbar-track {
@@ -306,16 +390,16 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-calculator"></i> Kalkulator HPP & Laba Produksi</h1>
-            <p class="subtitle">Hitung Harga Pokok Produksi per pcs dan analisis keuntungan dengan mudah. Simpan riwayat produksi dan kelola data dengan fitur import/export.</p>
+            <h1><i class="fas fa-calculator"></i> Kalkulator HPP & Penjualan</h1>
+            <p class="subtitle">Hitung HPP dan analisis penjualan dengan detail bahan baku</p>
         </header>
         
         <div class="card">
-            <h2 class="card-title"><i class="fas fa-edit"></i> Data Produksi</h2>
+            <h2 class="card-title"><i class="fas fa-edit"></i> Detail Bahan Baku</h2>
             
             <div class="form-group">
                 <label for="batchName">Nama Batch Produksi:</label>
-                <input type="text" id="batchName" placeholder="Contoh: Batch Juli 2023" value="Batch 1">
+                <input type="text" id="batchName" placeholder="Contoh: Batch Juli 2023" value="Batch Minuman Premium">
             </div>
             
             <div class="form-group">
@@ -323,26 +407,144 @@
                 <input type="date" id="productionDate">
             </div>
             
+            <h3 style="margin: 20px 0 15px; color: #00796b; border-bottom: 1px solid #b2dfdb; padding-bottom: 8px;">
+                <i class="fas fa-seedling"></i> Bahan Utama
+            </h3>
+            
+            <table class="material-table">
+                <thead>
+                    <tr>
+                        <th>Bahan</th>
+                        <th>Harga</th>
+                        <th>Terpakai</th>
+                        <th>Biaya</th>
+                    </tr>
+                </thead>
+                <tbody id="rawMaterialTable">
+                    <tr>
+                        <td>Susu Fullcream</td>
+                        <td>Rp 18.700 (1000ml)</td>
+                        <td>500ml</td>
+                        <td>Rp 9.350</td>
+                    </tr>
+                    <tr>
+                        <td>SKM</td>
+                        <td>Rp 15.900 (535g)</td>
+                        <td>178g</td>
+                        <td>Rp 5.291</td>
+                    </tr>
+                    <tr>
+                        <td>Maizena</td>
+                        <td>Rp 5.000 (250g)</td>
+                        <td>50g</td>
+                        <td>Rp 1.000</td>
+                    </tr>
+                    <tr>
+                        <td>Santan Kara</td>
+                        <td>Rp 6.000 (65ml)</td>
+                        <td>65ml</td>
+                        <td>Rp 6.000</td>
+                    </tr>
+                    <tr>
+                        <td>Vanili</td>
+                        <td>Rp 6.000 (55ml)</td>
+                        <td>5ml</td>
+                        <td>Rp 545</td>
+                    </tr>
+                    <tr>
+                        <td>Gula Pasir</td>
+                        <td>Rp 16.000 (1000g)</td>
+                        <td>115g</td>
+                        <td>Rp 1.840</td>
+                    </tr>
+                    <tr>
+                        <td>Air Mineral</td>
+                        <td>Rp 5.000 (15L)</td>
+                        <td>2500ml</td>
+                        <td>Rp 833</td>
+                    </tr>
+                    <tr style="font-weight: bold; background-color: #e8f5e9;">
+                        <td colspan="3">Total Bahan Utama</td>
+                        <td>Rp 24.859</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 style="margin: 25px 0 15px; color: #00796b; border-bottom: 1px solid #b2dfdb; padding-bottom: 8px;">
+                <i class="fas fa-candy-cane"></i> Topping & Glaze
+            </h3>
+            
+            <table class="material-table">
+                <thead>
+                    <tr>
+                        <th>Topping</th>
+                        <th>Harga</th>
+                        <th>Terpakai</th>
+                        <th>Biaya</th>
+                    </tr>
+                </thead>
+                <tbody id="toppingTable">
+                    <tr>
+                        <td>Bublegum</td>
+                        <td>Rp 5.800 (118g)</td>
+                        <td>10g</td>
+                        <td>Rp 492</td>
+                    </tr>
+                    <tr>
+                        <td>Red Velvet</td>
+                        <td>Rp 5.900 (118g)</td>
+                        <td>10g</td>
+                        <td>Rp 500</td>
+                    </tr>
+                    <tr>
+                        <td>Mangga</td>
+                        <td>Rp 5.300 (118g)</td>
+                        <td>11g</td>
+                        <td>Rp 494</td>
+                    </tr>
+                    <tr>
+                        <td>Matcha</td>
+                        <td>Rp 5.100 (118g)</td>
+                        <td>10g</td>
+                        <td>Rp 432</td>
+                    </tr>
+                    <tr>
+                        <td>Taro</td>
+                        <td>Rp 5.100 (118g)</td>
+                        <td>10g</td>
+                        <td>Rp 432</td>
+                    </tr>
+                    <tr>
+                        <td>Milo</td>
+                        <td>Rp 9.750 (104g)</td>
+                        <td>16g</td>
+                        <td>Rp 1.500</td>
+                    </tr>
+                    <tr>
+                        <td>Oreo</td>
+                        <td>Rp 9.750 (170g)</td>
+                        <td>25.5g</td>
+                        <td>Rp 1.463</td>
+                    </tr>
+                    <tr style="font-weight: bold; background-color: #e8f5e9;">
+                        <td colspan="3">Total Topping & Glaze</td>
+                        <td>Rp 5.313</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 style="margin: 25px 0 15px; color: #00796b; border-bottom: 1px solid #b2dfdb; padding-bottom: 8px;">
+                <i class="fas fa-bolt"></i> Biaya Operasional
+            </h3>
+            
             <div class="form-group">
-                <label>Biaya Bahan Baku Langsung:</label>
-                <div class="sub-inputs">
-                    <input type="number" id="rawMaterialCost" placeholder="Total biaya bahan baku" value="24859">
-                </div>
+                <label for="energyCost">Biaya Listrik:</label>
+                <input type="number" id="energyCost" placeholder="Biaya energi/listrik" value="2500">
             </div>
             
             <div class="form-group">
-                <label>Biaya Topping/Glaze:</label>
-                <div class="sub-inputs">
-                    <input type="number" id="toppingCost" placeholder="Total biaya topping" value="5313">
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Biaya Operasional:</label>
-                <div class="sub-inputs">
-                    <input type="number" id="energyCost" placeholder="Biaya energi/listrik" value="2500">
-                    <input type="number" id="laborCost" placeholder="Biaya tenaga kerja" value="5000">
-                </div>
+                <label for="laborCost">Biaya Tenaga Kerja:</label>
+                <input type="number" id="laborCost" placeholder="Biaya tenaga kerja" value="5000">
             </div>
             
             <div class="form-group">
@@ -363,22 +565,12 @@
             <button id="calculateBtn"><i class="fas fa-calculator"></i> Hitung HPP & Laba</button>
             
             <div class="button-group">
-                <button class="btn-export" id="exportBtn"><i class="fas fa-file-export"></i> Export Data</button>
-                <button class="btn-import" id="importBtn"><i class="fas fa-file-import"></i> Import Data</button>
+                <button class="btn-export" id="exportBtn"><i class="fas fa-file-export"></i> Export</button>
+                <button class="btn-import" id="importBtn"><i class="fas fa-file-import"></i> Import</button>
                 <button class="btn-reset" id="resetBtn"><i class="fas fa-redo"></i> Reset</button>
             </div>
             
             <input type="file" id="fileInput" accept=".json">
-            
-            <div class="info-text">
-                <p><strong>Tips:</strong></p>
-                <ul>
-                    <li>Isi semua data produksi dengan lengkap</li>
-                    <li>Klik "Hitung" untuk melihat hasil analisis</li>
-                    <li>Setiap perhitungan akan disimpan di log produksi</li>
-                    <li>Gunakan fitur Export/Import untuk backup data</li>
-                </ul>
-            </div>
         </div>
         
         <div class="card">
@@ -419,18 +611,43 @@
                 <div>Estimasi Laba Kotor: <span id="netProfit">Rp 9.080</span></div>
             </div>
             
-            <div class="info-text">
-                <p><strong>Catatan:</strong> Laba kotor belum memperhitungkan biaya lain seperti kemasan, transportasi, pemasaran, dan biaya operasional lainnya. Untuk laba bersih, kurangi biaya-biaya tersebut dari laba kotor.</p>
+            <!-- Sales Analysis Section -->
+            <h2 class="card-title" style="margin-top: 25px;"><i class="fas fa-chart-pie"></i> Analisis Penjualan</h2>
+            
+            <div class="analysis-container">
+                <div class="analysis-card">
+                    <div class="emoji">💰</div>
+                    <div class="analysis-title">Laba per Pcs</div>
+                    <div class="analysis-value" id="analysisProfit">Rp 454</div>
+                </div>
+                
+                <div class="analysis-card">
+                    <div class="emoji">🚀</div>
+                    <div class="analysis-title">Margin Laba</div>
+                    <div class="analysis-value" id="analysisMargin">45.4%</div>
+                </div>
+                
+                <div class="analysis-card">
+                    <div class="emoji">📦</div>
+                    <div class="analysis-title">Persediaan</div>
+                    <div class="analysis-value" id="analysisInventory">49 pcs</div>
+                </div>
+                
+                <div class="analysis-card">
+                    <div class="emoji">📊</div>
+                    <div class="analysis-title">Efisiensi</div>
+                    <div class="analysis-value" id="analysisEfficiency">Baik</div>
+                </div>
             </div>
         </div>
         
-        <div class="card" style="grid-column: 1 / -1;">
+        <div class="card">
             <h2 class="card-title"><i class="fas fa-history"></i> Log Produksi</h2>
             
             <div class="log-container" id="logContainer">
                 <div class="log-entry">
                     <div class="log-header">
-                        <span>Batch 1</span>
+                        <span>Batch Minuman Premium</span>
                         <span>28 Juli 2023</span>
                     </div>
                     <div class="log-content">
@@ -450,13 +667,21 @@
                             <span class="label">Total Laba:</span>
                             <span class="value">Rp 9.080</span>
                         </div>
+                        <div class="log-item">
+                            <span class="label">Persediaan:</span>
+                            <span class="value">49 pcs</span>
+                        </div>
+                        <div class="log-item">
+                            <span class="label">Nilai Persediaan:</span>
+                            <span class="value">Rp 26.754</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         
         <footer>
-            <p>Aplikasi Kalkulator HPP & Laba Produksi &copy; 2023 | Untuk analisis bisnis yang lebih akurat</p>
+            <p>Aplikasi Kalkulator HPP & Analisis Penjualan &copy; 2023</p>
         </footer>
     </div>
 
@@ -478,8 +703,8 @@
         // Fungsi untuk menghitung HPP dan laba
         function calculateHPP() {
             // Ambil nilai dari form
-            const rawMaterialCost = parseFloat(document.getElementById('rawMaterialCost').value) || 0;
-            const toppingCost = parseFloat(document.getElementById('toppingCost').value) || 0;
+            const rawMaterialCost = 24859; // Tetap sesuai contoh
+            const toppingCost = 5313;      // Tetap sesuai contoh
             const energyCost = parseFloat(document.getElementById('energyCost').value) || 0;
             const laborCost = parseFloat(document.getElementById('laborCost').value) || 0;
             const unitsProduced = parseFloat(document.getElementById('unitsProduced').value) || 1;
@@ -507,6 +732,11 @@
             // Hitung margin laba
             const profitMargin = (profitPerPcs / sellingPrice) * 100;
             
+            // Evaluasi efisiensi
+            let efficiency = "Baik";
+            if (profitMargin < 30) efficiency = "Cukup";
+            if (profitMargin < 15) efficiency = "Perlu Perbaikan";
+            
             // Tampilkan hasil
             document.getElementById('totalCost').textContent = formatCurrency(totalCost);
             document.getElementById('hppPerPcs').textContent = formatCurrency(hppPerPcs);
@@ -516,6 +746,12 @@
             document.getElementById('inventory').textContent = `${inventory} pcs (${formatCurrency(inventoryValue)})`;
             document.getElementById('profitMargin').textContent = `${profitMargin.toFixed(1)}%`;
             document.getElementById('netProfit').textContent = formatCurrency(totalProfit);
+            
+            // Update analisis penjualan
+            document.getElementById('analysisProfit').textContent = formatCurrency(profitPerPcs);
+            document.getElementById('analysisMargin').textContent = `${profitMargin.toFixed(1)}%`;
+            document.getElementById('analysisInventory').textContent = `${inventory} pcs`;
+            document.getElementById('analysisEfficiency').textContent = efficiency;
             
             // Tambahkan ke log produksi
             addToProductionLog({
@@ -641,8 +877,6 @@
         function resetForm() {
             document.getElementById('batchName').value = '';
             document.getElementById('productionDate').valueAsDate = new Date();
-            document.getElementById('rawMaterialCost').value = '';
-            document.getElementById('toppingCost').value = '';
             document.getElementById('energyCost').value = '';
             document.getElementById('laborCost').value = '';
             document.getElementById('unitsProduced').value = '';
@@ -675,7 +909,7 @@
         
         // Helper function: format date
         function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
             return new Date(dateString).toLocaleDateString('id-ID', options);
         }
         
