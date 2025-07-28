@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator HPP & Analisis Penjualan</title>
+    <title>Kalkulator HPP & Manajemen Bahan Baku</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -13,9 +13,23 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        :root {
+            --primary: #00796b;
+            --primary-light: #80cbc4;
+            --secondary: #0288d1;
+            --accent: #7b1fa2;
+            --danger: #d32f2f;
+            --success: #2e7d32;
+            --warning: #ed6c02;
+            --background: #e0f7fa;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #333;
+            --text-light: #546e7a;
+        }
+        
         body {
-            background: linear-gradient(135deg, #e0f7fa, #f5f5f5);
-            color: #333;
+            background: linear-gradient(135deg, var(--background), #f5f5f5);
+            color: var(--text);
             line-height: 1.6;
             padding: 15px;
             min-height: 100vh;
@@ -39,7 +53,7 @@
         }
         
         h1 {
-            color: #00796b;
+            color: var(--primary);
             font-size: 1.8rem;
             margin-bottom: 8px;
             display: flex;
@@ -49,13 +63,13 @@
         }
         
         .subtitle {
-            color: #00897b;
+            color: var(--primary);
             font-size: 0.95rem;
             padding: 0 15px;
         }
         
         .card {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
@@ -63,10 +77,10 @@
         }
         
         .card-title {
-            color: #00796b;
+            color: var(--primary);
             margin-bottom: 18px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #80cbc4;
+            border-bottom: 2px solid var(--primary-light);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -91,7 +105,7 @@
         label {
             display: block;
             margin-bottom: 6px;
-            color: #00897b;
+            color: var(--primary);
             font-weight: 500;
             font-size: 0.95rem;
         }
@@ -107,12 +121,12 @@
         
         input:focus, select:focus {
             outline: none;
-            border-color: #00796b;
+            border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.15);
         }
         
         button {
-            background: #00796b;
+            background: var(--primary);
             color: white;
             border: none;
             cursor: pointer;
@@ -145,7 +159,7 @@
         }
         
         .btn-export {
-            background: #0288d1;
+            background: var(--secondary);
         }
         
         .btn-export:hover {
@@ -153,7 +167,7 @@
         }
         
         .btn-import {
-            background: #7b1fa2;
+            background: var(--accent);
         }
         
         .btn-import:hover {
@@ -161,11 +175,21 @@
         }
         
         .btn-reset {
-            background: #d32f2f;
+            background: var(--danger);
         }
         
         .btn-reset:hover {
             background: #c62828;
+        }
+        
+        .btn-add {
+            background: var(--success);
+        }
+        
+        .btn-delete {
+            background: var(--danger);
+            width: auto;
+            padding: 6px 12px;
         }
         
         .results {
@@ -189,7 +213,7 @@
         
         .result-value {
             font-weight: 700;
-            color: #00796b;
+            color: var(--primary);
         }
         
         .highlight {
@@ -200,7 +224,7 @@
             text-align: center;
             font-weight: 700;
             font-size: 1.1rem;
-            color: #2e7d32;
+            color: var(--success);
         }
         
         .log-container {
@@ -214,8 +238,9 @@
             padding: 14px;
             border-radius: 8px;
             margin-bottom: 12px;
-            border-left: 4px solid #00796b;
+            border-left: 4px solid var(--primary);
             font-size: 0.9rem;
+            position: relative;
         }
         
         .log-header {
@@ -223,7 +248,7 @@
             justify-content: space-between;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #00796b;
+            color: var(--primary);
             font-size: 1rem;
         }
         
@@ -246,7 +271,7 @@
         
         .log-item .value {
             font-weight: 600;
-            color: #00796b;
+            color: var(--primary);
         }
         
         .empty-log {
@@ -282,7 +307,7 @@
             text-align: center;
             margin-top: 20px;
             padding: 15px;
-            color: #546e7a;
+            color: var(--text-light);
             font-size: 0.85rem;
         }
         
@@ -295,7 +320,7 @@
         }
         
         .material-table th {
-            background-color: #00897b;
+            background-color: var(--primary);
             color: white;
             text-align: left;
             padding: 10px;
@@ -312,6 +337,22 @@
         
         .material-table tr:hover {
             background-color: #e0f2f1;
+        }
+        
+        .material-table input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .material-table select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
         }
         
         /* Sales Analysis */
@@ -340,7 +381,7 @@
         
         .analysis-title {
             font-weight: 600;
-            color: #00796b;
+            color: var(--primary);
             margin-bottom: 5px;
             font-size: 1rem;
         }
@@ -349,6 +390,70 @@
             font-weight: 700;
             font-size: 1.2rem;
             color: #e91e63;
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.4s ease-in-out;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: var(--success);
+        }
+        
+        .notification.error {
+            background: var(--danger);
+        }
+        
+        .notification.info {
+            background: var(--secondary);
+        }
+        
+        .notification.warning {
+            background: var(--warning);
+        }
+        
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .action-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .delete-log {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            color: var(--danger);
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: auto;
+            padding: 5px;
         }
         
         /* Mobile specific styles */
@@ -378,7 +483,7 @@
         }
         
         ::-webkit-scrollbar-thumb {
-            background: #80cbc4;
+            background: var(--primary-light);
             border-radius: 10px;
         }
         
@@ -388,18 +493,21 @@
     </style>
 </head>
 <body>
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+    
     <div class="container">
         <header>
-            <h1><i class="fas fa-calculator"></i> Kalkulator HPP & Penjualan</h1>
-            <p class="subtitle">Hitung HPP dan analisis penjualan dengan detail bahan baku</p>
+            <h1><i class="fas fa-calculator"></i> Kalkulator HPP & Bahan Baku</h1>
+            <p class="subtitle">Kelola bahan baku, hitung HPP, dan analisis penjualan</p>
         </header>
         
         <div class="card">
-            <h2 class="card-title"><i class="fas fa-edit"></i> Detail Bahan Baku</h2>
+            <h2 class="card-title"><i class="fas fa-edit"></i> Data Produksi</h2>
             
             <div class="form-group">
                 <label for="batchName">Nama Batch Produksi:</label>
-                <input type="text" id="batchName" placeholder="Contoh: Batch Juli 2025" value="Batch Es Lilin">
+                <input type="text" id="batchName" placeholder="Contoh: Batch Juli 2023" value="Batch Minuman Premium">
             </div>
             
             <div class="form-group">
@@ -407,143 +515,73 @@
                 <input type="date" id="productionDate">
             </div>
             
-            <h3 style="margin: 20px 0 15px; color: #00796b; border-bottom: 1px solid #b2dfdb; padding-bottom: 8px;">
-                <i class="fas fa-seedling"></i> Bahan Utama
-            </h3>
+            <h2 class="card-title"><i class="fas fa-seedling"></i> Bahan Utama</h2>
+            <div class="action-buttons">
+                <button class="btn-add" id="addRawMaterialBtn"><i class="fas fa-plus"></i> Tambah Bahan</button>
+            </div>
             
             <table class="material-table">
                 <thead>
                     <tr>
                         <th>Bahan</th>
-                        <th>Harga</th>
+                        <th>Harga (Rp)</th>
+                        <th>Isi</th>
+                        <th>Satuan</th>
                         <th>Terpakai</th>
-                        <th>Biaya</th>
+                        <th>Biaya (Rp)</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="rawMaterialTable">
-                    <tr>
-                        <td>Susu Fullcream</td>
-                        <td>Rp 18.700 (1000ml)</td>
-                        <td>500ml</td>
-                        <td>Rp 9.350</td>
-                    </tr>
-                    <tr>
-                        <td>SKM</td>
-                        <td>Rp 15.900 (535g)</td>
-                        <td>178g</td>
-                        <td>Rp 5.291</td>
-                    </tr>
-                    <tr>
-                        <td>Maizena</td>
-                        <td>Rp 5.000 (250g)</td>
-                        <td>50g</td>
-                        <td>Rp 1.000</td>
-                    </tr>
-                    <tr>
-                        <td>Santan Kara</td>
-                        <td>Rp 6.000 (65ml)</td>
-                        <td>65ml</td>
-                        <td>Rp 6.000</td>
-                    </tr>
-                    <tr>
-                        <td>Vanili</td>
-                        <td>Rp 6.000 (55ml)</td>
-                        <td>5ml</td>
-                        <td>Rp 545</td>
-                    </tr>
-                    <tr>
-                        <td>Gula Pasir</td>
-                        <td>Rp 16.000 (1000g)</td>
-                        <td>115g</td>
-                        <td>Rp 1.840</td>
-                    </tr>
-                    <tr>
-                        <td>Air Mineral</td>
-                        <td>Rp 5.000 (15L)</td>
-                        <td>2500ml</td>
-                        <td>Rp 833</td>
-                    </tr>
-                    <tr style="font-weight: bold; background-color: #e8f5e9;">
-                        <td colspan="3">Total Bahan Utama</td>
-                        <td>Rp 24.859</td>
-                    </tr>
+                    <!-- Baris akan diisi secara dinamis -->
                 </tbody>
+                <tfoot>
+                    <tr style="font-weight: bold; background-color: #e8f5e9;">
+                        <td colspan="5">Total Bahan Utama</td>
+                        <td id="rawMaterialTotal">Rp 0</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
             
-            <h3 style="margin: 25px 0 15px; color: #00796b; border-bottom: 1px solid #b2dfdb; padding-bottom: 8px;">
-                <i class="fas fa-candy-cane"></i> Topping & Glaze
-            </h3>
+            <h2 class="card-title" style="margin-top: 25px;"><i class="fas fa-candy-cane"></i> Topping & Glaze</h2>
+            <div class="action-buttons">
+                <button class="btn-add" id="addToppingBtn"><i class="fas fa-plus"></i> Tambah Topping</button>
+            </div>
             
             <table class="material-table">
                 <thead>
                     <tr>
                         <th>Topping</th>
-                        <th>Harga</th>
+                        <th>Harga (Rp)</th>
+                        <th>Isi</th>
+                        <th>Satuan</th>
                         <th>Terpakai</th>
-                        <th>Biaya</th>
+                        <th>Biaya (Rp)</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="toppingTable">
-                    <tr>
-                        <td>Bublegum</td>
-                        <td>Rp 5.800 (118g)</td>
-                        <td>10g</td>
-                        <td>Rp 492</td>
-                    </tr>
-                    <tr>
-                        <td>Red Velvet</td>
-                        <td>Rp 5.900 (118g)</td>
-                        <td>10g</td>
-                        <td>Rp 500</td>
-                    </tr>
-                    <tr>
-                        <td>Mangga</td>
-                        <td>Rp 5.300 (118g)</td>
-                        <td>11g</td>
-                        <td>Rp 494</td>
-                    </tr>
-                    <tr>
-                        <td>Matcha</td>
-                        <td>Rp 5.100 (118g)</td>
-                        <td>10g</td>
-                        <td>Rp 432</td>
-                    </tr>
-                    <tr>
-                        <td>Taro</td>
-                        <td>Rp 5.100 (118g)</td>
-                        <td>10g</td>
-                        <td>Rp 432</td>
-                    </tr>
-                    <tr>
-                        <td>Milo</td>
-                        <td>Rp 9.750 (104g)</td>
-                        <td>16g</td>
-                        <td>Rp 1.500</td>
-                    </tr>
-                    <tr>
-                        <td>Oreo</td>
-                        <td>Rp 9.750 (170g)</td>
-                        <td>25.5g</td>
-                        <td>Rp 1.463</td>
-                    </tr>
-                    <tr style="font-weight: bold; background-color: #e8f5e9;">
-                        <td colspan="3">Total Topping & Glaze</td>
-                        <td>Rp 5.313</td>
-                    </tr>
+                    <!-- Baris akan diisi secara dinamis -->
                 </tbody>
+                <tfoot>
+                    <tr style="font-weight: bold; background-color: #e8f5e9;">
+                        <td colspan="5">Total Topping & Glaze</td>
+                        <td id="toppingTotal">Rp 0</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
             
-            <h3 style="margin: 25px 0 15px; color: #00796b; border-bottom: 1px solid #b2dfdb; padding-bottom: 8px;">
-                <i class="fas fa-bolt"></i> Biaya Operasional
-            </h3>
+            <h2 class="card-title" style="margin-top: 25px;"><i class="fas fa-bolt"></i> Biaya Operasional</h2>
             
             <div class="form-group">
-                <label for="energyCost">Biaya Listrik:</label>
+                <label for="energyCost">Biaya Listrik (Rp):</label>
                 <input type="number" id="energyCost" placeholder="Biaya energi/listrik" value="2500">
             </div>
             
             <div class="form-group">
-                <label for="laborCost">Biaya Tenaga Kerja:</label>
+                <label for="laborCost">Biaya Tenaga Kerja (Rp):</label>
                 <input type="number" id="laborCost" placeholder="Biaya tenaga kerja" value="5000">
             </div>
             
@@ -567,7 +605,7 @@
             <div class="button-group">
                 <button class="btn-export" id="exportBtn"><i class="fas fa-file-export"></i> Export</button>
                 <button class="btn-import" id="importBtn"><i class="fas fa-file-import"></i> Import</button>
-                <button class="btn-reset" id="resetBtn"><i class="fas fa-redo"></i> Reset</button>
+                <button class="btn-reset" id="resetBtn"><i class="fas fa-redo"></i> Reset Semua</button>
             </div>
             
             <input type="file" id="fileInput" accept=".json">
@@ -579,36 +617,36 @@
             <div class="results">
                 <div class="result-item">
                     <span>Total Biaya Produksi:</span>
-                    <span class="result-value" id="totalCost">Rp 37.672</span>
+                    <span class="result-value" id="totalCost">Rp 0</span>
                 </div>
                 <div class="result-item">
                     <span>HPP per Pcs:</span>
-                    <span class="result-value" id="hppPerPcs">Rp 546</span>
+                    <span class="result-value" id="hppPerPcs">Rp 0</span>
                 </div>
                 <div class="result-item">
                     <span>Harga Jual per Pcs:</span>
-                    <span class="result-value" id="sellingPriceDisplay">Rp 1.000</span>
+                    <span class="result-value" id="sellingPriceDisplay">Rp 0</span>
                 </div>
                 <div class="result-item">
                     <span>Laba Kotor per Pcs:</span>
-                    <span class="result-value" id="profitPerPcs">Rp 454</span>
+                    <span class="result-value" id="profitPerPcs">Rp 0</span>
                 </div>
                 <div class="result-item">
                     <span>Total Laba Kotor:</span>
-                    <span class="result-value" id="totalProfit">Rp 9.080</span>
+                    <span class="result-value" id="totalProfit">Rp 0</span>
                 </div>
                 <div class="result-item">
                     <span>Persediaan Tersisa:</span>
-                    <span class="result-value" id="inventory">49 pcs (Rp 26.754)</span>
+                    <span class="result-value" id="inventory">0 pcs (Rp 0)</span>
                 </div>
                 <div class="result-item">
                     <span>Margin Laba Kotor:</span>
-                    <span class="result-value" id="profitMargin">45.4%</span>
+                    <span class="result-value" id="profitMargin">0%</span>
                 </div>
             </div>
             
             <div class="highlight">
-                <div>Estimasi Laba Kotor: <span id="netProfit">Rp 9.080</span></div>
+                <div>Estimasi Laba Kotor: <span id="netProfit">Rp 0</span></div>
             </div>
             
             <!-- Sales Analysis Section -->
@@ -618,25 +656,25 @@
                 <div class="analysis-card">
                     <div class="emoji">💰</div>
                     <div class="analysis-title">Laba per Pcs</div>
-                    <div class="analysis-value" id="analysisProfit">Rp 454</div>
+                    <div class="analysis-value" id="analysisProfit">Rp 0</div>
                 </div>
                 
                 <div class="analysis-card">
                     <div class="emoji">🚀</div>
                     <div class="analysis-title">Margin Laba</div>
-                    <div class="analysis-value" id="analysisMargin">45.4%</div>
+                    <div class="analysis-value" id="analysisMargin">0%</div>
                 </div>
                 
                 <div class="analysis-card">
                     <div class="emoji">📦</div>
                     <div class="analysis-title">Persediaan</div>
-                    <div class="analysis-value" id="analysisInventory">49 pcs</div>
+                    <div class="analysis-value" id="analysisInventory">0 pcs</div>
                 </div>
                 
                 <div class="analysis-card">
                     <div class="emoji">📊</div>
                     <div class="analysis-title">Efisiensi</div>
-                    <div class="analysis-value" id="analysisEfficiency">Baik</div>
+                    <div class="analysis-value" id="analysisEfficiency">-</div>
                 </div>
             </div>
         </div>
@@ -645,43 +683,12 @@
             <h2 class="card-title"><i class="fas fa-history"></i> Log Produksi</h2>
             
             <div class="log-container" id="logContainer">
-                <div class="log-entry">
-                    <div class="log-header">
-                        <span>Batch Minuman Premium</span>
-                        <span>28 Juli 2023</span>
-                    </div>
-                    <div class="log-content">
-                        <div class="log-item">
-                            <span class="label">HPP per Pcs:</span>
-                            <span class="value">Rp 546</span>
-                        </div>
-                        <div class="log-item">
-                            <span class="label">Unit Produksi:</span>
-                            <span class="value">69 pcs</span>
-                        </div>
-                        <div class="log-item">
-                            <span class="label">Unit Terjual:</span>
-                            <span class="value">20 pcs</span>
-                        </div>
-                        <div class="log-item">
-                            <span class="label">Total Laba:</span>
-                            <span class="value">Rp 9.080</span>
-                        </div>
-                        <div class="log-item">
-                            <span class="label">Persediaan:</span>
-                            <span class="value">49 pcs</span>
-                        </div>
-                        <div class="log-item">
-                            <span class="label">Nilai Persediaan:</span>
-                            <span class="value">Rp 26.754</span>
-                        </div>
-                    </div>
-                </div>
+                <!-- Log akan diisi secara dinamis -->
             </div>
         </div>
         
         <footer>
-            <p>Aplikasi Kalkulator HPP & Analisis Penjualan &copy; 2023</p>
+            <p>Aplikasi Kalkulator HPP & Manajemen Bahan Baku &copy; 2023</p>
         </footer>
     </div>
 
@@ -692,19 +699,270 @@
         // Data log produksi
         let productionLog = [];
         
+        // Data bahan baku dan topping
+        let rawMaterials = [];
+        let toppings = [];
+        
         // Elemen DOM
         const calculateBtn = document.getElementById('calculateBtn');
         const exportBtn = document.getElementById('exportBtn');
         const importBtn = document.getElementById('importBtn');
         const resetBtn = document.getElementById('resetBtn');
+        const addRawMaterialBtn = document.getElementById('addRawMaterialBtn');
+        const addToppingBtn = document.getElementById('addToppingBtn');
         const fileInput = document.getElementById('fileInput');
         const logContainer = document.getElementById('logContainer');
+        const rawMaterialTable = document.getElementById('rawMaterialTable');
+        const toppingTable = document.getElementById('toppingTable');
+        const rawMaterialTotalEl = document.getElementById('rawMaterialTotal');
+        const toppingTotalEl = document.getElementById('toppingTotal');
+        
+        // Satuan yang tersedia
+        const units = ['ml', 'gram', 'kg', 'bungkus', 'pcs', 'liter', 'sachet'];
+        
+        // Tampilkan notifikasi
+        function showNotification(message, type = 'success') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            container.appendChild(notification);
+            
+            // Tampilkan notifikasi
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            // Sembunyikan setelah 3 detik
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    container.removeChild(notification);
+                }, 400);
+            }, 3000);
+        }
+        
+        // Format mata uang
+        function formatCurrency(value) {
+            return 'Rp ' + Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+        
+        // Format tanggal
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+        
+        // Hitung biaya berdasarkan jumlah terpakai
+        function calculateCost(price, amount, used, unit) {
+            if (!price || !amount || !used) return 0;
+            
+            // Konversi ke gram jika diperlukan
+            let conversion = 1;
+            if (unit === 'kg') conversion = 1000;
+            if (unit === 'liter') conversion = 1000;
+            
+            const normalizedAmount = amount * conversion;
+            const normalizedUsed = used * conversion;
+            
+            return (normalizedUsed / normalizedAmount) * price;
+        }
+        
+        // Tambah bahan baku
+        function addRawMaterial() {
+            const newId = Date.now();
+            rawMaterials.push({
+                id: newId,
+                name: '',
+                price: 0,
+                amount: 0,
+                unit: 'gram',
+                used: 0,
+                cost: 0
+            });
+            renderRawMaterials();
+        }
+        
+        // Tambah topping
+        function addTopping() {
+            const newId = Date.now();
+            toppings.push({
+                id: newId,
+                name: '',
+                price: 0,
+                amount: 0,
+                unit: 'gram',
+                used: 0,
+                cost: 0
+            });
+            renderToppings();
+        }
+        
+        // Hapus bahan baku
+        function removeRawMaterial(id) {
+            rawMaterials = rawMaterials.filter(item => item.id !== id);
+            renderRawMaterials();
+            calculateTotals();
+        }
+        
+        // Hapus topping
+        function removeTopping(id) {
+            toppings = toppings.filter(item => item.id !== id);
+            renderToppings();
+            calculateTotals();
+        }
+        
+        // Render bahan baku
+        function renderRawMaterials() {
+            rawMaterialTable.innerHTML = '';
+            
+            if (rawMaterials.length === 0) {
+                rawMaterialTable.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 20px; color: #78909c;">
+                            Tidak ada bahan baku. Klik "Tambah Bahan" untuk menambahkan.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            rawMaterials.forEach((material, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <input type="text" value="${material.name}" placeholder="Nama bahan" 
+                            onchange="updateRawMaterial(${material.id}, 'name', this.value)">
+                    </td>
+                    <td>
+                        <input type="number" value="${material.price}" placeholder="Harga" min="0"
+                            onchange="updateRawMaterial(${material.id}, 'price', parseFloat(this.value))">
+                    </td>
+                    <td>
+                        <input type="number" value="${material.amount}" placeholder="Isi" min="0" step="0.01"
+                            onchange="updateRawMaterial(${material.id}, 'amount', parseFloat(this.value))">
+                    </td>
+                    <td>
+                        <select onchange="updateRawMaterial(${material.id}, 'unit', this.value)">
+                            ${units.map(unit => `
+                                <option value="${unit}" ${material.unit === unit ? 'selected' : ''}>${unit}</option>
+                            `).join('')}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" value="${material.used}" placeholder="Terpakai" min="0" step="0.01"
+                            onchange="updateRawMaterial(${material.id}, 'used', parseFloat(this.value))">
+                    </td>
+                    <td>${formatCurrency(material.cost)}</td>
+                    <td>
+                        <button class="btn-delete" onclick="removeRawMaterial(${material.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                rawMaterialTable.appendChild(row);
+            });
+        }
+        
+        // Render topping
+        function renderToppings() {
+            toppingTable.innerHTML = '';
+            
+            if (toppings.length === 0) {
+                toppingTable.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 20px; color: #78909c;">
+                            Tidak ada topping. Klik "Tambah Topping" untuk menambahkan.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            toppings.forEach((topping, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <input type="text" value="${topping.name}" placeholder="Nama topping" 
+                            onchange="updateTopping(${topping.id}, 'name', this.value)">
+                    </td>
+                    <td>
+                        <input type="number" value="${topping.price}" placeholder="Harga" min="0"
+                            onchange="updateTopping(${topping.id}, 'price', parseFloat(this.value))">
+                    </td>
+                    <td>
+                        <input type="number" value="${topping.amount}" placeholder="Isi" min="0" step="0.01"
+                            onchange="updateTopping(${topping.id}, 'amount', parseFloat(this.value))">
+                    </td>
+                    <td>
+                        <select onchange="updateTopping(${topping.id}, 'unit', this.value)">
+                            ${units.map(unit => `
+                                <option value="${unit}" ${topping.unit === unit ? 'selected' : ''}>${unit}</option>
+                            `).join('')}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" value="${topping.used}" placeholder="Terpakai" min="0" step="0.01"
+                            onchange="updateTopping(${topping.id}, 'used', parseFloat(this.value))">
+                    </td>
+                    <td>${formatCurrency(topping.cost)}</td>
+                    <td>
+                        <button class="btn-delete" onclick="removeTopping(${topping.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                toppingTable.appendChild(row);
+            });
+        }
+        
+        // Update bahan baku
+        function updateRawMaterial(id, field, value) {
+            const material = rawMaterials.find(item => item.id === id);
+            if (material) {
+                material[field] = value;
+                
+                // Hitung ulang biaya
+                material.cost = calculateCost(material.price, material.amount, material.used, material.unit);
+                
+                renderRawMaterials();
+                calculateTotals();
+            }
+        }
+        
+        // Update topping
+        function updateTopping(id, field, value) {
+            const topping = toppings.find(item => item.id === id);
+            if (topping) {
+                topping[field] = value;
+                
+                // Hitung ulang biaya
+                topping.cost = calculateCost(topping.price, topping.amount, topping.used, topping.unit);
+                
+                renderToppings();
+                calculateTotals();
+            }
+        }
+        
+        // Hitung total bahan dan topping
+        function calculateTotals() {
+            // Hitung total bahan baku
+            const rawMaterialTotal = rawMaterials.reduce((sum, item) => sum + item.cost, 0);
+            rawMaterialTotalEl.textContent = formatCurrency(rawMaterialTotal);
+            
+            // Hitung total topping
+            const toppingTotal = toppings.reduce((sum, item) => sum + item.cost, 0);
+            toppingTotalEl.textContent = formatCurrency(toppingTotal);
+            
+            return { rawMaterialTotal, toppingTotal };
+        }
         
         // Fungsi untuk menghitung HPP dan laba
         function calculateHPP() {
             // Ambil nilai dari form
-            const rawMaterialCost = 24859; // Tetap sesuai contoh
-            const toppingCost = 5313;      // Tetap sesuai contoh
+            const totals = calculateTotals();
+            const rawMaterialCost = totals.rawMaterialTotal;
+            const toppingCost = totals.toppingTotal;
             const energyCost = parseFloat(document.getElementById('energyCost').value) || 0;
             const laborCost = parseFloat(document.getElementById('laborCost').value) || 0;
             const unitsProduced = parseFloat(document.getElementById('unitsProduced').value) || 1;
@@ -764,6 +1022,8 @@
                 unitsSold,
                 totalProfit
             });
+            
+            showNotification('Perhitungan HPP berhasil!', 'success');
         }
         
         // Fungsi untuk menambahkan data ke log produksi
@@ -771,6 +1031,14 @@
             productionLog.unshift(data);
             renderProductionLog();
             saveLogToLocalStorage();
+        }
+        
+        // Hapus log produksi
+        function deleteProductionLog(index) {
+            productionLog.splice(index, 1);
+            renderProductionLog();
+            saveLogToLocalStorage();
+            showNotification('Log produksi berhasil dihapus!', 'success');
         }
         
         // Fungsi untuk merender log produksi
@@ -782,13 +1050,16 @@
                 return;
             }
             
-            productionLog.forEach(log => {
+            productionLog.forEach((log, index) => {
                 const inventory = log.unitsProduced - log.unitsSold;
                 const inventoryValue = inventory * log.hppPerPcs;
                 
                 const logEntry = document.createElement('div');
                 logEntry.className = 'log-entry';
                 logEntry.innerHTML = `
+                    <button class="delete-log" onclick="deleteProductionLog(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
                     <div class="log-header">
                         <span>${log.batchName}</span>
                         <span>${formatDate(log.productionDate)}</span>
@@ -826,12 +1097,13 @@
         
         // Fungsi untuk export data
         function exportData() {
-            if (productionLog.length === 0) {
-                alert('Tidak ada data produksi untuk diexport');
-                return;
-            }
+            const data = {
+                rawMaterials,
+                toppings,
+                productionLog
+            };
             
-            const dataStr = JSON.stringify(productionLog, null, 2);
+            const dataStr = JSON.stringify(data, null, 2);
             const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
             
             const exportFileDefaultName = `data-produksi-${new Date().toISOString().slice(0,10)}.json`;
@@ -840,6 +1112,8 @@
             linkElement.setAttribute('href', dataUri);
             linkElement.setAttribute('download', exportFileDefaultName);
             linkElement.click();
+            
+            showNotification('Data berhasil diexport!', 'success');
         }
         
         // Fungsi untuk import data
@@ -856,16 +1130,26 @@
             reader.onload = function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
-                    if (Array.isArray(importedData)) {
-                        productionLog = importedData;
-                        renderProductionLog();
-                        saveLogToLocalStorage();
-                        alert(`Berhasil mengimpor ${importedData.length} data produksi`);
-                    } else {
-                        throw new Error('Format data tidak valid');
+                    
+                    if (importedData.rawMaterials) {
+                        rawMaterials = importedData.rawMaterials;
+                        renderRawMaterials();
                     }
+                    
+                    if (importedData.toppings) {
+                        toppings = importedData.toppings;
+                        renderToppings();
+                    }
+                    
+                    if (importedData.productionLog) {
+                        productionLog = importedData.productionLog;
+                        renderProductionLog();
+                    }
+                    
+                    saveLogToLocalStorage();
+                    showNotification('Data berhasil diimport!', 'success');
                 } catch (error) {
-                    alert('Error: File tidak valid atau rusak');
+                    showNotification('Error: File tidak valid atau rusak', 'error');
                     console.error(error);
                 }
             };
@@ -873,8 +1157,9 @@
             fileInput.value = '';
         }
         
-        // Fungsi untuk reset form
-        function resetForm() {
+        // Fungsi untuk reset semua data input
+        function resetAllData() {
+            // Reset form input
             document.getElementById('batchName').value = '';
             document.getElementById('productionDate').valueAsDate = new Date();
             document.getElementById('energyCost').value = '';
@@ -882,49 +1167,124 @@
             document.getElementById('unitsProduced').value = '';
             document.getElementById('sellingPrice').value = '';
             document.getElementById('unitsSold').value = '';
+            
+            // Reset bahan baku dan topping
+            rawMaterials = [];
+            toppings = [];
+            renderRawMaterials();
+            renderToppings();
+            calculateTotals();
+            
+            // Reset hasil perhitungan
+            document.getElementById('totalCost').textContent = 'Rp 0';
+            document.getElementById('hppPerPcs').textContent = 'Rp 0';
+            document.getElementById('sellingPriceDisplay').textContent = 'Rp 0';
+            document.getElementById('profitPerPcs').textContent = 'Rp 0';
+            document.getElementById('totalProfit').textContent = 'Rp 0';
+            document.getElementById('inventory').textContent = '0 pcs (Rp 0)';
+            document.getElementById('profitMargin').textContent = '0%';
+            document.getElementById('netProfit').textContent = 'Rp 0';
+            
+            // Reset analisis penjualan
+            document.getElementById('analysisProfit').textContent = 'Rp 0';
+            document.getElementById('analysisMargin').textContent = '0%';
+            document.getElementById('analysisInventory').textContent = '0 pcs';
+            document.getElementById('analysisEfficiency').textContent = '-';
+            
+            showNotification('Semua data input telah direset!', 'info');
         }
         
-        // Fungsi untuk menyimpan log ke localStorage
+        // Fungsi untuk menyimpan data ke localStorage
         function saveLogToLocalStorage() {
-            localStorage.setItem('productionLog', JSON.stringify(productionLog));
+            const data = {
+                rawMaterials,
+                toppings,
+                productionLog
+            };
+            localStorage.setItem('productionData', JSON.stringify(data));
         }
         
-        // Fungsi untuk memuat log dari localStorage
+        // Fungsi untuk memuat data dari localStorage
         function loadLogFromLocalStorage() {
-            const savedLog = localStorage.getItem('productionLog');
-            if (savedLog) {
+            const savedData = localStorage.getItem('productionData');
+            if (savedData) {
                 try {
-                    productionLog = JSON.parse(savedLog);
-                    renderProductionLog();
+                    const data = JSON.parse(savedData);
+                    
+                    if (data.rawMaterials) {
+                        rawMaterials = data.rawMaterials;
+                        renderRawMaterials();
+                    }
+                    
+                    if (data.toppings) {
+                        toppings = data.toppings;
+                        renderToppings();
+                    }
+                    
+                    if (data.productionLog) {
+                        productionLog = data.productionLog;
+                        renderProductionLog();
+                    }
+                    
+                    calculateTotals();
                 } catch (e) {
-                    console.error('Error loading log from localStorage:', e);
+                    console.error('Error loading data from localStorage:', e);
                 }
+            } else {
+                // Tambahkan data contoh jika tidak ada data yang tersimpan
+                addExampleData();
             }
         }
         
-        // Helper function: format currency
-        function formatCurrency(value) {
-            return 'Rp ' + Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        }
-        
-        // Helper function: format date
-        function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'short', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString('id-ID', options);
+        // Tambahkan data contoh
+        function addExampleData() {
+            // Data contoh bahan baku
+            rawMaterials = [
+                { id: 1, name: "Susu Fullcream", price: 18700, amount: 1000, unit: "ml", used: 500, cost: 9350 },
+                { id: 2, name: "SKM", price: 15900, amount: 535, unit: "gram", used: 178, cost: 5291 },
+                { id: 3, name: "Maizena", price: 5000, amount: 250, unit: "gram", used: 50, cost: 1000 },
+                { id: 4, name: "Santan Kara", price: 6000, amount: 65, unit: "ml", used: 65, cost: 6000 },
+                { id: 5, name: "Vanili", price: 6000, amount: 55, unit: "ml", used: 5, cost: 545 },
+                { id: 6, name: "Gula Pasir", price: 16000, amount: 1000, unit: "gram", used: 115, cost: 1840 },
+                { id: 7, name: "Air Mineral", price: 5000, amount: 15000, unit: "ml", used: 2500, cost: 833 }
+            ];
+            
+            // Data contoh topping
+            toppings = [
+                { id: 8, name: "Bublegum", price: 5800, amount: 118, unit: "gram", used: 10, cost: 492 },
+                { id: 9, name: "Red Velvet", price: 5900, amount: 118, unit: "gram", used: 10, cost: 500 },
+                { id: 10, name: "Mangga", price: 5300, amount: 118, unit: "gram", used: 11, cost: 494 },
+                { id: 11, name: "Matcha", price: 5100, amount: 118, unit: "gram", used: 10, cost: 432 },
+                { id: 12, name: "Taro", price: 5100, amount: 118, unit: "gram", used: 10, cost: 432 },
+                { id: 13, name: "Milo", price: 9750, amount: 104, unit: "gram", used: 16, cost: 1500 },
+                { id: 14, name: "Oreo", price: 9750, amount: 170, unit: "gram", used: 25.5, cost: 1463 }
+            ];
+            
+            renderRawMaterials();
+            renderToppings();
+            calculateTotals();
         }
         
         // Event listeners
         calculateBtn.addEventListener('click', calculateHPP);
         exportBtn.addEventListener('click', exportData);
         importBtn.addEventListener('click', importData);
-        resetBtn.addEventListener('click', resetForm);
+        resetBtn.addEventListener('click', resetAllData);
+        addRawMaterialBtn.addEventListener('click', addRawMaterial);
+        addToppingBtn.addEventListener('click', addTopping);
         fileInput.addEventListener('change', handleFileSelect);
         
         // Muat data saat halaman dimuat
         document.addEventListener('DOMContentLoaded', () => {
             loadLogFromLocalStorage();
-            calculateHPP(); // Hitung dengan data contoh
         });
+        
+        // Buat fungsi global untuk aksi dari HTML
+        window.updateRawMaterial = updateRawMaterial;
+        window.updateTopping = updateTopping;
+        window.removeRawMaterial = removeRawMaterial;
+        window.removeTopping = removeTopping;
+        window.deleteProductionLog = deleteProductionLog;
     </script>
 </body>
 </html>
